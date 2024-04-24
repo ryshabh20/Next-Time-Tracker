@@ -6,16 +6,15 @@ import {
 } from "@/helper/convertMillisecondsToTime";
 import DeleteButton from "@/helperComponents/DeleteButton";
 import GetCookie from "@/helperComponents/getcookies";
+import { BASE_URL } from "@/utils/BaseUrl";
 
 import { IoCalendarOutline } from "react-icons/io5";
 
 async function GetData(id: string) {
   const cookie = await GetCookie();
   try {
-    const url =
-      process.env.NODE_ENV === "production"
-        ? `https://time-tracker-xi-three.vercel.app/api/admin/project/projectdetail/${id}`
-        : `http://localhost:3000/api/admin/project/projectdetail/${id}`;
+    const url = BASE_URL + `admin/project/projectdetail/${id}`;
+
     const res = await fetch(url, {
       headers: {
         Cookie: `authtoken=${cookie}`,

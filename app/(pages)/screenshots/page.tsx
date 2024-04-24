@@ -1,13 +1,11 @@
 import ScreenshotImages from "@/helperComponents/ScreenshotImages";
 import GetCookie from "@/helperComponents/getcookies";
+import { BASE_URL } from "@/utils/BaseUrl";
 
 async function getScreenshots() {
   const cookie = await GetCookie();
   try {
-    const url =
-      process.env.NODE_ENV === "production"
-        ? "https://time-tracker-xi-three.vercel.app/api/users/getscreenshots/"
-        : "http://localhost:3000/api/users/getscreenshots/";
+    const url = BASE_URL + `users/getscreenshots/`;
 
     const res = await fetch(url, {
       headers: {
