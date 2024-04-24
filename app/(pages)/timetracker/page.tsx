@@ -6,14 +6,12 @@ import { TimeEntries } from "@/app/ui/dashboard/TimeEntries";
 import GetCookie from "@/helperComponents/getcookies";
 import { Suspense } from "react";
 import Loading from "./loading";
+import { BASE_URL } from "@/utils/BaseUrl";
 
 async function Data(id: string) {
   const cookie = await GetCookie();
   try {
-    const url =
-      process.env.NODE_ENV === "production"
-        ? `https://time-tracker-xi-three.vercel.app/api/users/getalltimeentries`
-        : `http://localhost:3000/api/users/getalltimeentries`;
+    const url = BASE_URL + `users/getalltimeentries`;
     const res = await fetch(url, {
       next: { tags: ["timeentries"] },
       headers: {
