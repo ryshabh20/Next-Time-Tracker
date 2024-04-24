@@ -27,7 +27,7 @@ export default function WorkDetailTable({
                 <tr className="bg-white h-12 border" key={workdetail._id}>
                   <td className="md:px-2 lg:px-5  text-custom-green">
                     <Link
-                      href={`/projects/admin/projectdetail/${workdetail.project_id._id}`}
+                      href={`/projects/projectdetail/${workdetail.project_id._id}`}
                     >
                       <li className="md:list-none lg:list-disc">
                         <span className="">

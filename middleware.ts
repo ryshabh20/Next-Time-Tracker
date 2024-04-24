@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
-import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
