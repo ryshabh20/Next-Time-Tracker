@@ -7,7 +7,7 @@ import GetCookie from "@/helperComponents/getcookies";
 import { Suspense } from "react";
 import Loading from "./loading";
 
-export async function Data(id: string) {
+async function Data(id: string) {
   const cookie = await GetCookie();
   try {
     const url =
