@@ -26,7 +26,7 @@ export default function ProjectsTable({
               return (
                 <tr className="bg-white h-12 border" key={project._id}>
                   <td className=" md:px-2 lg:px-5  text-custom-green">
-                    <Link href={`/projects/admin/projectdetail/${project._id}`}>
+                    <Link href={`/projects/projectdetail/${project._id}`}>
                       {" "}
                       <li className="md:list-none lg:list-disc">
                         <span className="">{project.projectname}</span>
