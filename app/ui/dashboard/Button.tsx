@@ -1,19 +1,25 @@
 import { useAppSelector } from "@/store/store";
-import { useEffect } from "react";
+// import { useState } from "react";
 
 export default function Button({
+  loading,
   handleOnSubmit,
 }: {
   handleOnSubmit: () => Promise<void>;
+  loading: boolean;
 }) {
   const user = useAppSelector((state) => state?.userData);
-  useEffect;
+  const handleSubmit = () => {
+    handleOnSubmit();
+  };
   return (
     <button
       type="submit"
-      className="bg-custom-green text-white px-5"
-      onClick={handleOnSubmit}
-      //   disabled={loading}
+      className={`bg-custom-green text-white px-5 ${
+        loading ? "bg-gray-400" : "bg-custom-green"
+      }`}
+      onClick={handleSubmit}
+      disabled={loading}
     >
       {user?.isTimer ? "Stop" : "Start"}
     </button>

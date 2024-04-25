@@ -16,6 +16,8 @@ export function CreateTimeEntry() {
   const [seconds, setSeconds] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState(false);
   const [task, setTask] = useState<string>("");
+
+  const [loading, setLoading] = useState<boolean>(false);
   const project = user?.currentTask?.currentProject;
 
   const currentEntry = async () => {
@@ -34,7 +36,6 @@ export function CreateTimeEntry() {
     currentEntry();
   }, [user?.isTimer]);
   const projectSet = (id: string, name: string) => {
-    console.log("hello i am running ");
     dispatch(
       setUserData({
         ...user!,
@@ -51,6 +52,7 @@ export function CreateTimeEntry() {
     const EntryDetails = { task, project };
     if (!user?.isTimer) {
       try {
+        setLoading(true);
         const response = await axios.post("/api/users/timeentry", EntryDetails);
 
         dispatch(
@@ -69,6 +71,7 @@ export function CreateTimeEntry() {
           })
         );
         setTask(response.data.task);
+        setLoading(false);
         notify(response.data.success, response.data.message);
       } catch (err: any) {
         notify(err.response.data.success, err.response.data.error);
@@ -79,6 +82,7 @@ export function CreateTimeEntry() {
       user?.isTimer
     ) {
       try {
+        setLoading(true);
         const response = await axios.post("/api/users/timeentry", EntryDetails);
         dispatch(
           setUserData({
@@ -98,6 +102,7 @@ export function CreateTimeEntry() {
         );
 
         setTask(response.data.task);
+        setLoading(false);
         notify(response.data.success, response.data.message);
         dynamicaction("timeentries");
       } catch (err: any) {
@@ -111,62 +116,6 @@ export function CreateTimeEntry() {
     }
   };
 
-  //     const bodydata = { task, user, project };
-
-  //     try {
-  //       const response = await axios.post("/api/users/timeentry", bodydata);
-  //       if (user && response) {
-  //         if (!user?.isTimer) {
-  //           const newTaskId = response.data.savedEntry._id.toString();
-  //           const allTimeEntries = user.timeentries;
-  //           dispatch(
-  //             setUserData({
-  //               ...user,
-  //               isTimer: response.data.updatedTimer,
-  //               currentTask: {
-  //                 ...user.currentTask,
-  //                 description: response.data.task,
-  //                 currentProject: {
-  //                   projectId: response.data.project.projectId,
-  //                   projectName: response.data.project.projectName,
-  //                   projectTask: "",
-  //                 },
-  //               },
-  //               timeentries: [...allTimeEntries, newTaskId],
-  //             })
-  //           );
-  //         } else {
-  //           dispatch(
-  //             setUserData({
-  //               ...user,
-  //               isTimer: response.data.updatedTimer,
-  //               currentTask: {
-  //                 ...user.currentTask,
-  //                 description: response.data.task,
-  //                 currentProject: {
-  //                   projectId: response.data.project.projectId,
-  //                   projectName: response.data.project.projectName,
-  //                   projectTask: "",
-  //                 },
-  //               },
-  //             })
-  //           );
-  //         }
-  //       }
-  //       if (response.data.success) {
-  //         notify(response.data.success, response.data.message);
-  //       }
-
-  //       setTask(response.data.task);
-  //     } catch (err: any) {
-  //       notify(err.response.data.success, err.response.data.error);
-  //     }
-  //     //   revalidatePath("/timetracker");
-  //     dynamicaction("timeentries");
-  //   } else {
-  //     notify(false, "Please fill all fields and try again");
-  //   }
-  // };
   useEffect(() => {
     setTask(user?.currentTask?.description || "");
   }, [user?.currentTask?.description]);
@@ -199,7 +148,7 @@ export function CreateTimeEntry() {
           <SearchableDropdown projectfn={projectSet} />
         </div>
         <Timer startTime={seconds} />
-        <Button handleOnSubmit={handleOnSubmit}></Button>
+        <Button loading={loading} handleOnSubmit={handleOnSubmit}></Button>
       </div>
     </div>
   );
