@@ -1,5 +1,4 @@
 "use server";
-type DailyEntries = Record<string, Entry[]>;
 
 import { CreateTimeEntry } from "@/app/ui/dashboard/CreateTimeEntry";
 import { TimeEntries } from "@/app/ui/dashboard/TimeEntries";
