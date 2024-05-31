@@ -22,9 +22,9 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const timeEntries = await TimeEntries.find({
       user_id: userId,
       end_time: { $exists: true },
-      start_time: {
-        $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      },
+      // start_time: {
+      //   $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      // },
     })
       .sort({
         createdAt: -1,
