@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto_Condensed } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/store/redux-provider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 const inter = Roboto_Condensed({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,7 +18,10 @@ export default function RootLayout({
   return (
     <ReduxProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          {children}
+          <SpeedInsights />
+        </body>
       </html>
     </ReduxProvider>
   );
