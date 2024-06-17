@@ -23,12 +23,6 @@ export default function Modal({
   showModal: string;
   setShowModal: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const openModal = (id: any) => {
-    setShowModal(id);
-  };
-  const closeModal = () => {
-    setShowModal("");
-  };
   const deleteHandler = async () => {
     try {
       const response = await axios.delete(`${deleteroute}/${showModal}`);
@@ -43,8 +37,17 @@ export default function Modal({
   };
 
   return (
-    <td className="relative">
-      <FaEllipsisV onClick={() => openModal(Id)} />
+    <td className="relative foucs:border focus-within:border-red-500">
+      <FaEllipsisV
+        onClick={() => {
+          if (showModal === Id) {
+            setShowModal("");
+          } else {
+            setShowModal(Id);
+          }
+        }}
+        className="hover:cursor-pointer"
+      />
       {showModal === Id && (
         <div className="absolute bg-white z-10  shadow-lg border ">
           {details && (
