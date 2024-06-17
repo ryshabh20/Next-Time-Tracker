@@ -43,32 +43,34 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
   return (
     <div className="flex justify-center">
-      <div className="flex ">
-        <PaginationArrow
-          direction="left"
-          href={createPageURL(currentPage - 1)}
-          isDisabled={currentPage <= 1}
-        />
+      {!!allPages.length && (
+        <div className="flex ">
+          <PaginationArrow
+            direction="left"
+            href={createPageURL(currentPage - 1)}
+            isDisabled={currentPage <= 1}
+          />
 
-        <div className="flex space-x-3">
-          {allPages?.map((page, index) => {
-            return (
-              <PaginationNumber
-                key={uuidv4()}
-                href={createPageURL(page)}
-                page={page}
-                isActive={currentPage === page}
-              />
-            );
-          })}
+          <div className="flex space-x-3">
+            {allPages?.map((page) => {
+              return (
+                <PaginationNumber
+                  key={uuidv4()}
+                  href={createPageURL(page)}
+                  page={page}
+                  isActive={currentPage === page}
+                />
+              );
+            })}
+          </div>
+
+          <PaginationArrow
+            direction="right"
+            href={createPageURL(currentPage + 1)}
+            isDisabled={currentPage >= totalPages}
+          />
         </div>
-
-        <PaginationArrow
-          direction="right"
-          href={createPageURL(currentPage + 1)}
-          isDisabled={currentPage >= totalPages}
-        />
-      </div>
+      )}
     </div>
   );
 }

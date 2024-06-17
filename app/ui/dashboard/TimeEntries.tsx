@@ -129,7 +129,7 @@ export function TimeEntries({
                   </div>
                   <div className="flex px-3 ">
                     <CiPlay1
-                      className="w-6  h-6 "
+                      className="w-6  h-6 hover:cursor-pointer"
                       onClick={() =>
                         updateHandler(
                           entry._id,
@@ -144,7 +144,7 @@ export function TimeEntries({
                     className="px-3 border-l-2"
                     onClick={() => deleteHandler(entry._id, entry.start_time)}
                   >
-                    <RiDeleteBin6Fill className="w-6 h-6" />
+                    <RiDeleteBin6Fill className="w-6 h-6 hover:cursor-pointer" />
                   </div>
                 </div>
               ))}

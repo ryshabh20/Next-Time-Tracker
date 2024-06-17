@@ -62,7 +62,7 @@ const SearchableDropdown = ({
   );
 
   return (
-    <div className="relative  ">
+    <div className="relative hover:cursor-pointer">
       <div
         className=" bg-white  lg:mr-4 md:mr-0  flex items-center text-md  "
         onClick={handleToggleDropdown}
@@ -74,9 +74,10 @@ const SearchableDropdown = ({
         <div className="top-11 max-h-[20rem] overflow-y-auto p-2 absolute z-30 bg-white border ">
           <input
             type="text"
-            className="border p-2 rounded-sm"
+            className="border p-2 rounded-sm outline-none"
             value={searchTerm}
             onChange={handleSearchChange}
+            onBlur={() => setIsOpen(false)}
             placeholder="Search..."
             autoFocus
           />
