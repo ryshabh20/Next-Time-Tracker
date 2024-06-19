@@ -77,7 +77,7 @@ const SearchableDropdown = ({
             className="border p-2 rounded-sm outline-none"
             value={searchTerm}
             onChange={handleSearchChange}
-            onBlur={() => setIsOpen(false)}
+            onBlur={() => setTimeout(() => setIsOpen(false), 200)}
             placeholder="Search..."
             autoFocus
           />
