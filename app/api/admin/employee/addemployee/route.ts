@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
 
     const newEmployee = await new Employee({
       ...body,
+      email,
       createdBy: user._id,
     });
 

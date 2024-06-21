@@ -69,7 +69,7 @@ interface Project {
   hoursConsumed: number | null;
   hoursLeft: number | null;
   description: string;
-  assignedTeam: string[];
+  assignedTeam: { [key: string]: string };
 }
 
 interface PopulatedTimeEntry {
@@ -138,4 +138,5 @@ interface Employee {
   technologies: string[];
   permission: string[];
   createdBy: string;
+  email: string;
 }

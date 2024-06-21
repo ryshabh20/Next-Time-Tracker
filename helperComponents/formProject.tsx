@@ -16,7 +16,9 @@ interface form {
   hoursConsumed: number | null;
   hoursLeft: number | null;
   description: string;
-  assignedTeam: string[];
+  assignedTeam: {
+    [key: string]: string;
+  };
 }
 const FormProject: React.FC<{
   edit?: boolean;
@@ -31,7 +33,7 @@ const FormProject: React.FC<{
     hoursConsumed: null,
     hoursLeft: null,
     description: "",
-    assignedTeam: [],
+    assignedTeam: {},
   });
   const [clientOptions, setClientOptions] = useState<string[]>([]);
   const notify = (status: boolean, message: string) => {
@@ -129,7 +131,7 @@ const FormProject: React.FC<{
             hoursConsumed: null,
             hoursLeft: null,
             description: "",
-            assignedTeam: [],
+            assignedTeam: {},
           });
           notify(response.data.success, response.data.message);
         }
@@ -141,22 +143,26 @@ const FormProject: React.FC<{
   const addTags = (event: any) => {
     if (
       event.target.value !== "" &&
-      formData.assignedTeam.indexOf(event.target.value) === -1
+      !formData.assignedTeam[event.target.value]
     ) {
       setFormData({
         ...formData,
-        assignedTeam: [...formData.assignedTeam, event.target.value],
+        assignedTeam: { ...formData.assignedTeam, [event.target.value]: "" },
       });
     }
   };
-  const removeTags = (index: number) => {
+  const removeTags = (tag: string) => {
+    let obj: { [key: string]: string } = {};
+    for (let key in formData.assignedTeam) {
+      if (key === tag) {
+        continue;
+      } else {
+        obj[key] = "";
+      }
+    }
     setFormData({
       ...formData,
-      assignedTeam: [
-        ...formData.assignedTeam.filter(
-          (tag) => formData.assignedTeam.indexOf(tag) !== index
-        ),
-      ],
+      assignedTeam: obj,
     });
   };
 
@@ -282,16 +288,16 @@ const FormProject: React.FC<{
                 multiple
                 onChange={addTags}
               >
-                <option className="p-2 border " value="design">
+                <option className="p-2 border " value="Design">
                   Design
                 </option>
                 <option className="p-2 border " value="QA">
                   QA
                 </option>
-                <option className="p-2 border " value="developer">
+                <option className="p-2 border " value="Developer">
                   Developer
                 </option>
-                <option className="p-2 border " value="marketing">
+                <option className="p-2 border " value="Marketing">
                   Marketing
                 </option>
                 <option className="p-2 border " value="HR">
@@ -300,18 +306,20 @@ const FormProject: React.FC<{
               </select>
             </div>
             <div className="flex ml-auto space-x-2">
-              {formData?.assignedTeam?.map((tag, index) => (
-                <div
-                  className="flex items-center space-x-2 py-1  text-gray-600 rounded-lg bg-gray-200 px-2"
-                  key={index}
-                >
-                  <span>{tag}</span>
-                  <MdCancel
-                    color="rgb(75 85 99)"
-                    onClick={() => removeTags(index)}
-                  />
-                </div>
-              ))}
+              {Object.keys(formData?.assignedTeam).map(
+                (tag: string, index: number) => (
+                  <div
+                    className="flex items-center space-x-2 py-1  text-gray-600 rounded-lg bg-gray-200 px-2"
+                    key={index}
+                  >
+                    <span>{tag}</span>
+                    <MdCancel
+                      color="rgb(75 85 99)"
+                      onClick={() => removeTags(tag)}
+                    />
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>

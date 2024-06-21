@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
   const page: number = Number(request.nextUrl.searchParams.get("page")) || 1;
   const search: string = request.nextUrl.searchParams.get("search") || "";
   let sort = request.nextUrl.searchParams.get("sort") || "employeename";
-  let role = request.nextUrl.searchParams.get("role");
   if (
     sort !== "employeename" &&
     sort !== "department" &&
@@ -33,16 +32,6 @@ export async function GET(request: NextRequest) {
         { message: "You are not authorized", success: false },
         { status: 401 }
       );
-    }
-    if (role) {
-      const filterEmployeeByRole = await Employee.find({
-        department: role,
-      });
-      return NextResponse.json({
-        message: `all ${role} employees fetched`,
-        success: true,
-        employees: filterEmployeeByRole,
-      });
     }
 
     const skip = (page - 1) * items_per_page;

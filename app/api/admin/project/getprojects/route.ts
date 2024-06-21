@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
     const projectsPromise = Project.find({
       projectname: { $regex: search, $options: "i" },
     })
+      .populate("assignedTeam", "employeename")
       .sort({ [sort]: order as SortOrder })
       .limit(items_per_page)
       .skip(skip);
