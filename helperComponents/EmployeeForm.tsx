@@ -220,6 +220,8 @@ const EmployeeForm: React.FC<{
               <option value="Developer">Developer</option>
               <option value="HR">HR</option>
               <option value="Sales">Sales</option>
+              <option value="Design">Design</option>
+              <option value="QA">QA</option>
             </select>
             <div className="flex space-x-2 items-center w-full ">
               <label htmlFor="team" className="w-max text-nowrap ">

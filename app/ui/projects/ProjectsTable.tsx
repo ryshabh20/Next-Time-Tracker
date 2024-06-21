@@ -39,7 +39,11 @@ export default function ProjectsTable({
                   </td>
                   <td className=" md:px-2 lg:px-5">
                     <div className="max-h-[3rem] overflow-hidden line-clamp-2 ">
-                      {project.assignedTeam.join(" , ")}
+                      {Object.values(project?.assignedTeam).join("").length
+                        ? Object.entries(project?.assignedTeam)
+                            .map(([key, val]) => `${key} : ${val.empname}`)
+                            .join(" , ")
+                        : "No Members Assigned Yet"}
                     </div>
                   </td>
                   <Modal
@@ -49,6 +53,7 @@ export default function ProjectsTable({
                     setShowModal={setShowModal}
                     deleteroute="/api/admin/project/deleteproject"
                     editroute="projects/admin/editproject"
+                    accessroute="projects/admin/projectaccess"
                   />
                 </tr>
               );

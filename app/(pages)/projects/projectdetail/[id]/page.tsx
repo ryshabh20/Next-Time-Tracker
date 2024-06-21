@@ -45,8 +45,8 @@ async function GetData(id: string) {
     });
 
     return { ...data, uniqueName };
-  } catch (error) {
-    throw new Error("Error fetching the data from the route");
+  } catch (error: any) {
+    console.log(error.message);
   }
 }
 

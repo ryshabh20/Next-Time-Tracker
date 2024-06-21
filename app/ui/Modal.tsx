@@ -10,6 +10,7 @@ export default function Modal({
   Id,
   deleteroute,
   editroute,
+  accessroute,
   tag,
   details,
   setShowModal,
@@ -19,6 +20,7 @@ export default function Modal({
   deleteroute: string;
   editroute: string;
   details?: string;
+  accessroute?: string;
   tag: string;
   showModal: string;
   setShowModal: React.Dispatch<React.SetStateAction<string>>;
@@ -63,6 +65,13 @@ export default function Modal({
           <div onClick={deleteHandler} className="px-2 py-1  hover:bg-red-400">
             Delete
           </div>
+          {accessroute && (
+            <Link href={`${accessroute}/${Id}`}>
+              <div className="px-2 py-1 border-b hover:bg-gray-400 ">
+                Edit Access
+              </div>
+            </Link>
+          )}
         </div>
       )}
     </td>

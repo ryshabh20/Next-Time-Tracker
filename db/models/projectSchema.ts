@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose, { Mongoose, Schema } from "mongoose";
 import User from "./userSchema";
 import Client from "./clientSchema";
 const projectSchema = new mongoose.Schema(
@@ -42,7 +42,7 @@ const projectSchema = new mongoose.Schema(
       required: true,
     },
     assignedTeam: {
-      type: [String],
+      type: Schema.Types.Mixed,
       required: true,
     },
   },
