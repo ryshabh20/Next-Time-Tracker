@@ -11,10 +11,9 @@ connect();
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const userId = reqBody.user._id;
-    const userRole = reqBody.user.role;
+    const user = await tokenDataId(request, true);
     const tokenId = await tokenDataId(request);
-    if (userId !== tokenId || userRole !== "admin") {
+    if (user.role !== "admin") {
       return NextResponse.json(
         { message: "You are not authorized" },
         { status: 401 }
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
       contactnumber,
       email,
       country,
-      adminId: userId,
+      adminId: user._id,
     });
     const savedClient = newClient.save();
 

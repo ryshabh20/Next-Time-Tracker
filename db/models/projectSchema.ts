@@ -1,7 +1,25 @@
-import mongoose, { Mongoose, Schema } from "mongoose";
+import mongoose, { Document, Model, ObjectId } from "mongoose";
 import User from "./userSchema";
 import Client from "./clientSchema";
-const projectSchema = new mongoose.Schema(
+import Employees from "./employeeSchema";
+interface Iproject {
+  projectname: string;
+  adminId: ObjectId;
+  client: ObjectId;
+  clientname: string;
+  technology: string;
+  hoursAlloted: number;
+  hoursConsumed?: number;
+  hoursLeft?: number;
+  description: string;
+  assignedTeam: Array<string>;
+  assignedMembers: Array<ObjectId>;
+}
+interface ProjectDocument extends Iproject, Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
+const projectSchema = new mongoose.Schema<ProjectDocument>(
   {
     projectname: {
       type: String,
@@ -41,15 +59,15 @@ const projectSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    assignedTeam: {
-      type: Schema.Types.Mixed,
-      required: true,
-    },
+    assignedTeam: [{ type: String, required: true }],
+    assignedMembers: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "employees" },
+    ],
   },
   { timestamps: true }
 );
 
-const Project =
+const Project: Model<ProjectDocument> =
   mongoose.models.projects || mongoose.model("projects", projectSchema);
 
 export default Project;

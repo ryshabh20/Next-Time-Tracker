@@ -136,7 +136,10 @@ const Dashboard = () => {
       <div>
         <div className="flex bg-[#e9e9e9] p-3 rounded-sm items-center justify-between">
           <div>Today</div>
-          <div className="relative " onClick={() => setModal(true)}>
+          <div
+            className="relative hover:cursor-pointer"
+            onClick={() => setModal(true)}
+          >
             <dialog ref={dialogRef} open={modal}>
               <div className="absolute -left-32 space-y-2 ">
                 <div className="bg-white   md:p-1 lg:p-4 md:space-y-1 lg:space-y-2 border md:w-48 lg:w-60  flex flex-col">

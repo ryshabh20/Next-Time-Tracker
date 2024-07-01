@@ -6,11 +6,12 @@ import { setUserData } from "@/store/slices/userSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { dynamicaction } from "@/helper/action";
-import { notify } from "@/utils/Notify";
-import dynamic from "next/dynamic";
-const Button = dynamic(() => import("./Button"), { ssr: false });
 
+import dynamic from "next/dynamic";
+import useNotify from "@/utils/Notify";
+const Button = dynamic(() => import("./Button"), { ssr: false });
 export function CreateTimeEntry() {
+  const notify = useNotify();
   const user = useAppSelector((state: RootState) => state.userData);
   const dispatch = useAppDispatch();
   const [seconds, setSeconds] = useState<number>(0);
@@ -103,9 +104,11 @@ export function CreateTimeEntry() {
 
         setTask(response.data.task);
         setLoading(false);
+        console.log(response.data);
         notify(response.data.success, response.data.message);
         dynamicaction("timeentries");
       } catch (err: any) {
+        console.log(err);
         notify(err.response.data.success, err.response.data.error);
       }
     } else if (

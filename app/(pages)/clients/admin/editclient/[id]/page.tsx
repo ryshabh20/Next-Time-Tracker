@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { countryOptions } from "@/helper/countryData";
 import { useAppSelector } from "@/store/store";
 
-import toast, { Toaster } from "react-hot-toast";
-import AdminRoute from "@/helperComponents/AdminRoute";
+import useNotify from "@/utils/Notify";
 const Addeditclient = ({ params }: { params: { id: string } }) => {
   const [formData, setFormData] = useState({
     clientname: "",
@@ -15,13 +14,7 @@ const Addeditclient = ({ params }: { params: { id: string } }) => {
   });
 
   const [hydrate, setHydrate] = useState(false);
-  const notify = (status: boolean, message: string) => {
-    if (status) {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-  };
+  const notify = useNotify();
 
   const FetchClient = async () => {
     const response = await axios.get(
@@ -126,7 +119,6 @@ const Addeditclient = ({ params }: { params: { id: string } }) => {
           Edit Client
         </button>
       </form>
-      <Toaster position="bottom-right" />
     </div>
   );
 };

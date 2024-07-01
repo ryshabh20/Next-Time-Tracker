@@ -1,9 +1,7 @@
 "use client";
+import useNotify from "@/utils/Notify";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-import toast, { Toaster } from "react-hot-toast";
-
 import { MdCancel } from "react-icons/md";
 interface form {
   employeename: string;
@@ -26,14 +24,7 @@ const EmployeeForm: React.FC<{
     permission: [],
   });
   const [hydrated, setHydrated] = useState(false);
-  const notify = (status: boolean, message: string) => {
-    if (status) {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-  };
-
+  const notify = useNotify();
   const fetchingemployee = async () => {
     try {
       const response = await axios.get(`/api/admin/employee/getemployee/${id}`);
@@ -321,7 +312,6 @@ const EmployeeForm: React.FC<{
           {edit ? "Edit Employee " : "Add Employee"}
         </button>
       </form>
-      <Toaster position="bottom-right" />
     </div>
   );
 };

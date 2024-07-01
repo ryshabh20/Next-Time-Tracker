@@ -6,6 +6,7 @@ import Project from "@/db/models/projectSchema";
 
 import { tokenDataId } from "@/helper/tokenData";
 import { SortOrder } from "mongoose";
+import Employee from "@/db/models/employeeSchema";
 connect();
 export async function GET(request: NextRequest) {
   const items_per_page: number =
@@ -29,19 +30,36 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       );
     }
-
+    await Employee.find({});
     const skip = (page - 1) * items_per_page;
-    const countPromise = Project.countDocuments({
-      projectname: { $regex: search, $options: "i" },
-    });
+    let countPromise;
+    let projectsPromise;
+    if (user.role !== "admin") {
+      countPromise = Project.countDocuments({
+        projectname: { $regex: search, $options: "i" },
+        assignedMembers: { $in: [user.employee] },
+      });
 
-    const projectsPromise = Project.find({
-      projectname: { $regex: search, $options: "i" },
-    })
-      .populate("assignedTeam", "employeename")
-      .sort({ [sort]: order as SortOrder })
-      .limit(items_per_page)
-      .skip(skip);
+      projectsPromise = Project.find({
+        projectname: { $regex: search, $options: "i" },
+        assignedMembers: { $in: [user.employee] },
+      })
+        .populate("assignedMembers", ["employeename", "department"])
+        .sort({ [sort]: order as SortOrder })
+        .limit(items_per_page)
+        .skip(skip);
+    } else {
+      countPromise = Project.countDocuments({
+        projectname: { $regex: search, $options: "i" },
+      });
+      projectsPromise = Project.find({
+        projectname: { $regex: search, $options: "i" },
+      })
+        .populate("assignedMembers", ["employeename", "department"])
+        .sort({ [sort]: order as SortOrder })
+        .limit(items_per_page)
+        .skip(skip);
+    }
     const [count, projects] = await Promise.all([
       countPromise,
       projectsPromise,

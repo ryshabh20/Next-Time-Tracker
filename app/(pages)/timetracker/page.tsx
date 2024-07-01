@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import Loading from "./loading";
 import { BASE_URL } from "@/utils/BaseUrl";
 
-async function Data(id: string) {
+async function Data() {
   const cookie = await GetCookie();
   try {
     const url = BASE_URL + `users/getalltimeentries`;
@@ -17,7 +17,6 @@ async function Data(id: string) {
         Cookie: `authtoken=${cookie}`,
       },
     });
-
     const response = await res.json();
 
     return {
@@ -26,7 +25,6 @@ async function Data(id: string) {
       duration: response.duration,
     };
   } catch (error) {
-    console.log(error);
     return {
       loading: false,
       success: false,
@@ -37,7 +35,7 @@ async function Data(id: string) {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const data = await Data(params.id);
+  const data = await Data();
   const groupEntries: TimeTrackerEntries[] = data.timeEntries;
   const duration: { _id: string; totalDuration: number }[] = data.duration;
 

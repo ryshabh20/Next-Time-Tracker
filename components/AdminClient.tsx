@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { countryOptions } from "@/helper/countryData";
 import { useAppSelector } from "@/store/store";
-import toast, { Toaster } from "react-hot-toast";
+import useNotify from "@/utils/Notify";
 
 const AddClient: React.FC = () => {
   const user = useAppSelector((state) => state?.userData);
@@ -13,13 +13,7 @@ const AddClient: React.FC = () => {
     email: "",
     country: "",
   });
-  const notify = (status: boolean, message: string) => {
-    if (status) {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-  };
+  const notify = useNotify();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData.country === "" || formData.country === "placeholder") {
@@ -108,7 +102,6 @@ const AddClient: React.FC = () => {
           Add Client
         </button>
       </form>
-      <Toaster position="bottom-right" />
     </div>
   );
 };
