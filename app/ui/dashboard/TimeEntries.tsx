@@ -13,7 +13,8 @@ import { setUserData } from "@/store/slices/userSlice";
 
 import axios from "axios";
 import { dynamicaction } from "@/helper/action";
-import { notify } from "@/utils/Notify";
+import useNotify from "@/utils/Notify";
+
 export function TimeEntries({
   groupEntries,
   duration,
@@ -23,6 +24,7 @@ export function TimeEntries({
 }) {
   const timeEntries = groupBy(groupEntries);
 
+  const notify = useNotify();
   function formatTime(date: Date) {
     let hours = date.getHours();
     const ampm = hours >= 12 ? "PM" : "AM";

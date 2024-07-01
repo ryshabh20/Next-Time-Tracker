@@ -1,20 +1,18 @@
 "use client";
 import Project from "@/db/models/projectSchema";
 import { BASE_URL } from "@/utils/BaseUrl";
+import useNotify from "@/utils/Notify";
 import axios from "axios";
-import { FormEvent, FormEventHandler, useState } from "react";
+import { FormEvent, FormEventHandler, useEffect, useState } from "react";
 import Select from "react-select";
 
-type assignedTeamType = {
-  [key: string]:
-    | string
-    | {
-        emp: string;
-        empname: string;
-        empemail: string;
-        empcode: string;
-      };
-};
+type assignedTeamType = Record<
+  string,
+  {
+    value: string;
+    label: string;
+  }[]
+>;
 const SelectProject = ({
   projectDetail,
   employees,
@@ -22,64 +20,70 @@ const SelectProject = ({
   projectDetail: Project;
   employees: Employee[];
 }) => {
-  const [formData, setFormData] = useState<assignedTeamType>(
-    projectDetail.assignedTeam
-  );
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [formData, setFormData] = useState<assignedTeamType>({});
+  const notify = useNotify();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!!Object.keys(formData).length) {
+    if (Object.values(formData).length) {
       try {
+        const IdsArray = Object.values(formData)
+          .map((val: { value: string; label: string }[]) =>
+            val.map(
+              (nestedVal: { value: string; label: string }) => nestedVal.value
+            )
+          )
+          .flat();
         const data = {
-          assignedMembers: formData,
+          assignedMembers: IdsArray,
           projectId: projectDetail._id,
         };
-        const respone = axios.post(
-          `${BASE_URL}/admin/project/updateaccess`,
-          data
-        );
-      } catch (error) {}
+        await axios.post(`${BASE_URL}/admin/project/updateaccess`, data);
+        notify(true, "Project access updated successfully");
+      } catch (error: any) {
+        notify(true, error.message);
+      }
     }
   };
 
+  useEffect(() => {
+    const ob: Record<string, any> = {};
+    projectDetail?.assignedMembers.forEach((b) => {
+      ob[b.department] ??= [];
+      ob[b.department].push({
+        label: b.email || b.code + " : " + b.employeename,
+        value: b._id,
+      });
+    });
+    setFormData(ob);
+  }, []);
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <span>Assign Project</span>
-        {Object.keys(projectDetail?.assignedTeam).map(
-          (dept: string, idx: number) => {
-            const EmployeeOptions = employees
-              .filter((emp: Employee) => emp.department === dept)
-              .map((emp: Employee) => ({
-                label: emp.email || emp.code + " : " + emp.employeename,
-                value: emp._id,
-                code: emp.code,
-                name: emp.employeename,
-                email: emp.email,
-              }));
-            return (
-              <div key={idx}>
-                <span>Choose someone for your {dept} team</span>
-                <Select
-                  id="EmployeeId"
-                  options={EmployeeOptions}
-                  onChange={(e: any) => {
-                    setFormData({
-                      ...formData,
-                      [dept]: {
-                        emp: e?.value,
-                        empname: e?.name,
-                        empemail: e?.label,
-                        empcode: e?.code,
-                      },
-                    });
-                  }}
-                  // placeholder={edit ? "" : "Client"}
-                  // value={selectValue}
-                ></Select>
-              </div>
-            );
-          }
-        )}
+        {projectDetail?.assignedTeam?.map((dept: string, idx: number) => {
+          const EmployeeOptions = employees
+            .filter((emp: Employee) => emp.department === dept)
+            .map((emp: Employee) => ({
+              label: emp.email || emp.code + " : " + emp.employeename,
+              value: emp._id,
+            }));
+          return (
+            <div key={idx}>
+              <span>Choose someone for your {dept} team</span>
+              <Select
+                id="EmployeeId"
+                options={EmployeeOptions}
+                isMulti
+                onChange={(e: any) => {
+                  setFormData({ ...formData, [dept]: e });
+                }}
+                // placeholder={edit ? "" : "Client"}
+                value={formData[dept]}
+              ></Select>
+            </div>
+          );
+        })}
       </div>
       <button
         type="submit"

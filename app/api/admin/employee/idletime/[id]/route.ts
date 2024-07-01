@@ -14,16 +14,12 @@ export async function GET(
   let search: any = request.nextUrl.searchParams.get("search") || "";
   if (search === "Invalid Date") {
     search = "";
-  } else {
-    console.log(search);
   }
 
   if (order === "asc") {
-    console.log("asc");
     order = 1;
   }
   if (order === "desc") {
-    console.log("desc");
     order = -1;
   }
 

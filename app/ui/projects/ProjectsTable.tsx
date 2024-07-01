@@ -39,10 +39,12 @@ export default function ProjectsTable({
                   </td>
                   <td className=" md:px-2 lg:px-5">
                     <div className="max-h-[3rem] overflow-hidden line-clamp-2 ">
-                      {Object.values(project?.assignedTeam).join("").length
-                        ? Object.entries(project?.assignedTeam)
-                            .map(([key, val]) => `${key} : ${val.empname}`)
-                            .join(" , ")
+                      {project?.assignedMembers.length
+                        ? project?.assignedMembers.map(
+                            (member: assignedMembers) => {
+                              return `${member.department} : ${member.employeename} , `;
+                            }
+                          )
                         : "No Members Assigned Yet"}
                     </div>
                   </td>

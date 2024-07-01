@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { FaEllipsisV } from "react-icons/fa";
-import { useState } from "react";
-import { notify } from "@/utils/Notify";
+
 import axios from "axios";
 import { dynamicaction } from "@/helper/action";
+import useNotify from "@/utils/Notify";
 
 export default function Modal({
   Id,
@@ -25,6 +25,7 @@ export default function Modal({
   showModal: string;
   setShowModal: React.Dispatch<React.SetStateAction<string>>;
 }) {
+  const notify = useNotify();
   const deleteHandler = async () => {
     try {
       const response = await axios.delete(`${deleteroute}/${showModal}`);
@@ -54,20 +55,25 @@ export default function Modal({
         <div className="absolute bg-white z-10  shadow-lg border ">
           {details && (
             <Link href={`${details}/${Id}`}>
-              <div className="px-2 py-1 border-b hover:bg-gray-400 ">
+              <div className="px-2 py-1 border-b hover:bg-gray-400  hover:text-white">
                 Details
               </div>
             </Link>
           )}
           <Link href={`${editroute}/${Id}`}>
-            <div className="px-2 py-1 border-b hover:bg-gray-400 ">Edit</div>
+            <div className="px-2 py-1 border-b hover:bg-gray-400 hover:text-white ">
+              Edit
+            </div>
           </Link>
-          <div onClick={deleteHandler} className="px-2 py-1  hover:bg-red-400">
+          <div
+            onClick={deleteHandler}
+            className="px-2 py-1  hover:bg-red-400 hover:text-white"
+          >
             Delete
           </div>
           {accessroute && (
             <Link href={`${accessroute}/${Id}`}>
-              <div className="px-2 py-1 border-b hover:bg-gray-400 ">
+              <div className="px-2 py-1 border-t  hover:bg-blue-400 hover:text-white">
                 Edit Access
               </div>
             </Link>

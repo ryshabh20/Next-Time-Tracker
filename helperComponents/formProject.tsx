@@ -1,12 +1,9 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { countryOptions } from "@/helper/countryData";
-import { useAppSelector } from "@/store/store";
 import Select from "react-select";
-import toast, { Toaster } from "react-hot-toast";
-
 import { MdCancel } from "react-icons/md";
+import useNotify from "@/utils/Notify";
 interface form {
   projectname: string;
   client: string;
@@ -16,9 +13,7 @@ interface form {
   hoursConsumed: number | null;
   hoursLeft: number | null;
   description: string;
-  assignedTeam: {
-    [key: string]: string;
-  };
+  assignedTeam: string[];
 }
 const FormProject: React.FC<{
   edit?: boolean;
@@ -33,16 +28,10 @@ const FormProject: React.FC<{
     hoursConsumed: null,
     hoursLeft: null,
     description: "",
-    assignedTeam: {},
+    assignedTeam: [],
   });
   const [clientOptions, setClientOptions] = useState<string[]>([]);
-  const notify = (status: boolean, message: string) => {
-    if (status) {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-  };
+  const notify = useNotify();
   const fetchingClient = async () => {
     const response = await axios.get(`/api/admin/client/getclients?items=100`);
     setClientOptions((prevClients) => [
@@ -131,7 +120,7 @@ const FormProject: React.FC<{
             hoursConsumed: null,
             hoursLeft: null,
             description: "",
-            assignedTeam: {},
+            assignedTeam: [],
           });
           notify(response.data.success, response.data.message);
         }
@@ -143,26 +132,22 @@ const FormProject: React.FC<{
   const addTags = (event: any) => {
     if (
       event.target.value !== "" &&
-      !formData.assignedTeam[event.target.value]
+      formData.assignedTeam.indexOf(event.target.value) === -1
     ) {
       setFormData({
         ...formData,
-        assignedTeam: { ...formData.assignedTeam, [event.target.value]: "" },
+        assignedTeam: [...formData.assignedTeam, event.target.value],
       });
     }
   };
-  const removeTags = (tag: string) => {
-    let obj: { [key: string]: string } = {};
-    for (let key in formData.assignedTeam) {
-      if (key === tag) {
-        continue;
-      } else {
-        obj[key] = "";
-      }
-    }
+  const removeTags = (index: number) => {
     setFormData({
       ...formData,
-      assignedTeam: obj,
+      assignedTeam: [
+        ...formData.assignedTeam.filter(
+          (tag) => formData.assignedTeam.indexOf(tag) !== index
+        ),
+      ],
     });
   };
 
@@ -306,20 +291,18 @@ const FormProject: React.FC<{
               </select>
             </div>
             <div className="flex ml-auto space-x-2">
-              {Object.keys(formData?.assignedTeam).map(
-                (tag: string, index: number) => (
-                  <div
-                    className="flex items-center space-x-2 py-1  text-gray-600 rounded-lg bg-gray-200 px-2"
-                    key={index}
-                  >
-                    <span>{tag}</span>
-                    <MdCancel
-                      color="rgb(75 85 99)"
-                      onClick={() => removeTags(tag)}
-                    />
-                  </div>
-                )
-              )}
+              {formData?.assignedTeam?.map((tag, index) => (
+                <div
+                  className="flex items-center space-x-2 py-1  text-gray-600 rounded-lg bg-gray-200 px-2"
+                  key={index}
+                >
+                  <span>{tag}</span>
+                  <MdCancel
+                    color="rgb(75 85 99)"
+                    onClick={() => removeTags(index)}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -330,7 +313,6 @@ const FormProject: React.FC<{
           {edit ? "Edit Project" : "Add Project"}
         </button>
       </form>
-      <Toaster position="bottom-right" />
     </div>
   );
 };

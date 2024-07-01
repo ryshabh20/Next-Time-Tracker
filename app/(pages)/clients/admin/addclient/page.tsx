@@ -3,8 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import { countryOptions } from "@/helper/countryData";
 import { useAppSelector } from "@/store/store";
-import AdminRoute from "@/helperComponents/AdminRoute";
 import toast, { Toaster } from "react-hot-toast";
+import useNotify from "@/utils/Notify";
 interface AddClientForm {
   clientname?: string;
   contactnumber?: string;
@@ -20,13 +20,8 @@ const AddClient = () => {
     email: "",
     country: "",
   });
-  const notify = (status: boolean, message: string) => {
-    if (status) {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-  };
+  const notify = useNotify();
+
   const [formError, setformError] = useState<AddClientForm>({
     clientname: "",
     contactnumber: "",
@@ -70,7 +65,7 @@ const AddClient = () => {
       notify(false, "Please select a country");
     }
     if (isValid) {
-      const data = { formData, user };
+      const data = { formData };
       try {
         const response = await axios.post("/api/admin/client/addclient", data);
         setFormData({

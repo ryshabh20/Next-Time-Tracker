@@ -20,6 +20,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
       return NextResponse.json(
         {
+          message: "Project access updated successfully",
           employees: filteredEmployeeByRole,
           success: true,
         },

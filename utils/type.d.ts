@@ -69,9 +69,17 @@ interface Project {
   hoursConsumed: number | null;
   hoursLeft: number | null;
   description: string;
-  assignedTeam: { [key: string]: string };
+  assignedTeam: string[];
+  assignedMembers: assignedMembers[];
 }
 
+interface assignedMembers {
+  _id: string;
+  employeename: string;
+  code: string;
+  department: string;
+  email: string;
+}
 interface PopulatedTimeEntry {
   _id: string;
   user_id: {

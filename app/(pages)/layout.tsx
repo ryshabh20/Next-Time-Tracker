@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 ("");
 import { useAppDispatch } from "@/store/store";
 import { setUserData } from "@/store/slices/userSlice";
@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { userDetails } from "@/helper/hydrationHelper";
 import SideBarData from "@/helperComponents/SideBarData";
-import { Toaster } from "react-hot-toast";
+import { ToastProvider } from "@/context/toastContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -67,9 +67,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
       <div className="bg-[#f2f2f2]  md:w-8/12 lg:w-4/5 py-16 px-10 ">
         {" "}
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </div>
-      <Toaster position="bottom-right" />
     </div>
   );
 };

@@ -24,26 +24,13 @@ async function GetData(id: string) {
     });
     const data = await res.json();
 
-    const name: [string, string][] = data?.timeEntry?.map(
-      (employee: TimeEntryDetails) => [
-        employee?.user_id?.employee?.designation || "HR",
-        employee.user_id.name,
-      ]
+    const uniqueName = data?.projectDetails[0]?.assignedMembers.reduce(
+      (acc: any, cur: assignedMembers) => {
+        acc.push([cur.department, cur.employeename]);
+        return acc;
+      },
+      []
     );
-
-    const uniqueValues = [...new Set(name)];
-    let uniqueName: [string, string][] = [];
-
-    uniqueValues.forEach((sublist) => {
-      let exists = uniqueName?.some((item) => {
-        return item[0] === sublist[0] && item[1] === sublist[1];
-      });
-
-      if (!exists) {
-        uniqueName.push(sublist);
-      }
-    });
-
     return { ...data, uniqueName };
   } catch (error: any) {
     console.log(error.message);

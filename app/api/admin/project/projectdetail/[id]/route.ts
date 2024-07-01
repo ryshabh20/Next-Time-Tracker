@@ -21,7 +21,10 @@ export async function GET(
       );
     }
     const employee = Employee.find({});
-    const projectDetailsPromise = Project.find({ _id: params.id });
+    const projectDetailsPromise = Project.find({ _id: params.id }).populate(
+      "assignedMembers",
+      ["email", "department", "code", "employeename"]
+    );
     const projectId = new mongoose.Types.ObjectId(params.id);
     const groupedTimeEntriesPromise = TimeEntries.aggregate([
       {
@@ -84,7 +87,6 @@ export async function GET(
     const [groupedTimeEntries, duration, projectDetails] = await Promise.all([
       groupedTimeEntriesPromise,
       durationPromise,
-
       projectDetailsPromise,
     ]);
     const timeEntry = await TimeEntries.find({

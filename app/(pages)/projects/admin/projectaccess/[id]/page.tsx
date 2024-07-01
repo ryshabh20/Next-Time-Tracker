@@ -3,11 +3,19 @@ import GetCookie from "@/helperComponents/getcookies";
 import { BASE_URL } from "@/utils/BaseUrl";
 import SelectProject from "./SelectProject";
 
-const getProject = async (id: string) => {
+const getProject = async (id: string, cookie: string) => {
   try {
-    const projectDetail = await Project.findById(id);
-    console.log(projectDetail);
-    return projectDetail;
+    const url = `${BASE_URL}admin/project/accessdetail`;
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(id),
+      next: { tags: ["getEmployees"] },
+      headers: {
+        Cookie: `authtoken=${cookie}`,
+      },
+    });
+    const response = await res.json();
+    return response.projectDetail;
   } catch (error: any) {
     console.log("error", error.message);
   }
@@ -43,10 +51,10 @@ const getEmployees = async (
 };
 const ProjectAccess = async ({ params }: { params: { id: string } }) => {
   const cookie = await GetCookie();
-  const projectDetail = await getProject(params.id);
-  const role = Object.keys(projectDetail?.assignedTeam);
+  const projectDetail = await getProject(params.id, cookie);
+
+  const role = projectDetail?.assignedTeam;
   const { employees } = await getEmployees(role, cookie);
-  console.log("projectDetail========>", projectDetail);
   return <SelectProject projectDetail={projectDetail} employees={employees} />;
 };
 
