@@ -1,12 +1,15 @@
+import { auth } from "@/auth";
 import User from "@/db/models/userSchema";
 import { tokenDataId } from "@/helper/tokenData";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await tokenDataId(request, true);
+    const session = await auth();
+    // const user = await tokenDataId(request, true);
+    const userId = session?.user.id;
 
-    if (!user) {
+    if (!session?.user) {
       return NextResponse.json(
         {
           message: "You are not logged in ",
@@ -15,7 +18,7 @@ export async function GET(request: NextRequest) {
         { status: 401 }
       );
     }
-    const userData = await User.findById(user._id);
+    const userData = await User.findById(userId);
     if (!userData) {
       return NextResponse.json(
         {

@@ -2,13 +2,15 @@ import { NextResponse, NextRequest } from "next/server";
 import { tokenDataId } from "@/helper/tokenData";
 import Employee from "@/db/models/employeeSchema";
 import { connect } from "@/db/dbConfig";
+import { auth } from "@/auth";
 
 connect();
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const user = await tokenDataId(request, true);
-    if (user.role !== "admin") {
+    const session = await auth();
+    const user = session?.user;
+    if (user?.role !== "admin") {
       return NextResponse.json(
         { message: "You are not authorised to change access" },
         { status: 401 }

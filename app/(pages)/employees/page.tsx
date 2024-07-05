@@ -17,7 +17,7 @@ const GetEmployees = async (
     const res = await fetch(url, {
       next: { tags: ["employees"] },
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
     });
 

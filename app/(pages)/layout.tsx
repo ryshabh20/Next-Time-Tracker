@@ -1,40 +1,20 @@
-"use client";
-import React, { useEffect } from "react";
-("");
-import { useAppDispatch } from "@/store/store";
-import { setUserData } from "@/store/slices/userSlice";
+import React from "react";
 import Image from "next/image";
 import axios from "axios";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { userDetails } from "@/helper/hydrationHelper";
+// import { usePathname } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import UserDetails from "@/helperComponents/UserDetails";
 import SideBarData from "@/helperComponents/SideBarData";
 import { ToastProvider } from "@/context/toastContext";
+
+import LogoutButton from "@/helperComponents/LogoutButton";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const router = useRouter();
-
-  const dispatch = useAppDispatch();
-
-  const pathname = usePathname();
-  useEffect(() => {
-    const intervalId = setInterval(takeScreenshot, 1800000);
-
-    return () => clearInterval(intervalId);
-  }, [pathname]);
-  const logoutHandler = async () => {
-    await axios.get("/api/users/logout");
-    dispatch(setUserData(null));
-    router.push("/login");
-  };
-
-  const takeScreenshot = async () => {
-    const response = await axios.get(`/api/users/screenshot${pathname}`);
-  };
+  const takeScreenshot = async () => {};
 
   return (
     <div className="w-full min-h-screen flex flex-row">
@@ -51,17 +31,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         <div className=" flex  h-4/5 flex-col  ">
           <div className="flex items-center mx-10  space-x-4">
-            {userDetails()}
+            <UserDetails />
           </div>
           <div className=" flex flex-1 justify-between flex-col ">
             <SideBarData />
 
-            <button
-              onClick={logoutHandler}
-              className=" bg-custom-green m-2  text-white hover:text-black p-3 text-xl"
-            >
-              Logout
-            </button>
+            <LogoutButton />
           </div>
         </div>
       </div>

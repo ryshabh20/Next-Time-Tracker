@@ -1,0 +1,48 @@
+# Query: authtoken=
+# ContextLines: 1
+
+9 results - 8 files
+
+app/(pages)/clients/page.tsx:
+  19        headers: {
+  20:         Cookie: `authjs.session-token=${cookie}`,
+  21        },
+
+app/(pages)/employees/page.tsx:
+  19        headers: {
+  20:         Cookie: `authjs.session-token=${cookie}`,
+  21        },
+
+app/(pages)/employees/admin/idletime/[id]/page.tsx:
+  21        headers: {
+  22:         Cookie: `authjs.session-token=${cookie}`,
+  23        },
+
+app/(pages)/employees/admin/workdetail/[id]/page.tsx:
+  21        headers: {
+  22:         Cookie: `authjs.session-token=${cookie}`,
+  23        },
+
+app/(pages)/projects/page.tsx:
+  19        headers: {
+  20:         Cookie: `authjs.session-token=${cookie}`,
+  21        },
+
+app/(pages)/projects/admin/projectaccess/[id]/page.tsx:
+  13        headers: {
+  14:         Cookie: `authjs.session-token=${cookie}`,
+  15        },
+
+  34        headers: {
+  35:         Cookie: `authjs.session-token=${cookie}`,
+  36        },
+
+app/(pages)/projects/projectdetail/[id]/page.tsx:
+  19        headers: {
+  20:         Cookie: `authjs.session-token=${cookie}`,
+  21        },
+
+app/(pages)/screenshots/page.tsx:
+  11        headers: {
+  12:         Cookie: `authjs.session-token=${cookie}`,
+  13        },

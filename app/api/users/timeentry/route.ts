@@ -4,13 +4,15 @@ import TimeEntries from "@/db/models/timeEntries";
 import { tokenDataId } from "@/helper/tokenData";
 import User from "@/db/models/userSchema";
 import Project from "@/db/models/projectSchema";
+import { auth } from "@/auth";
 
 connect();
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
     const reqBody = await request.json();
-    const userId = await tokenDataId(request);
+    const userId = session?.user.id;
     if (!userId) {
       return NextResponse.json(
         {

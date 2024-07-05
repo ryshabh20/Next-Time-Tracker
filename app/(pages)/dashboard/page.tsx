@@ -11,6 +11,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
+import { auth } from "@/auth";
 Chart.register(CategoryScale);
 Chart.register(LinearScale);
 Chart.register(BarElement);

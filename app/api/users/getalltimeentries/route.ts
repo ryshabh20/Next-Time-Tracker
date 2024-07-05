@@ -2,13 +2,16 @@ import mongoose from "mongoose";
 import { connect } from "@/db/dbConfig";
 import Project from "@/db/models/projectSchema";
 import TimeEntries from "@/db/models/timeEntries";
-import { tokenDataId } from "@/helper/tokenData";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 
 connect();
 export async function GET(request: NextRequest, response: NextResponse) {
+  const session = await auth();
+
   try {
-    const userId = await tokenDataId(request);
+    const userId = session?.user.id;
+
     if (!userId) {
       return NextResponse.json(
         {

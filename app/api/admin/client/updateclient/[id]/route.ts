@@ -2,6 +2,7 @@ import { connect } from "@/db/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 import Client from "@/db/models/clientSchema";
 import { tokenDataId } from "@/helper/tokenData";
+import { auth } from "@/auth";
 
 connect();
 
@@ -10,7 +11,9 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     const body = await request.json();
 
     const clientId = params.id;

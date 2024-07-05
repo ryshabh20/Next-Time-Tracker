@@ -12,7 +12,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
-import userReducer, { fetchUser } from "./slices/userSlice";
+import userReducer from "./slices/userSlice";
 
 const persistConfig = {
   key: "root",
@@ -31,7 +31,7 @@ export const store = configureStore({
     }),
 });
 
-store.dispatch(fetchUser());
+// store.dispatch(fetchUser());
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;

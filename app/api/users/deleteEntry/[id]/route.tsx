@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import TimeEntries from "@/db/models/timeEntries";
 import User from "@/db/models/userSchema";
 import { tokenDataId } from "@/helper/tokenData";
@@ -10,7 +11,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const userId = await tokenDataId(request);
+    const session = await auth();
+    const userId = session?.user.id;
     const entryId = params.id;
     const entryUser = await TimeEntries.findOne({ _id: entryId });
     if (!entryUser) {

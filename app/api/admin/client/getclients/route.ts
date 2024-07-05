@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { tokenDataId } from "@/helper/tokenData";
 import { SortOrder } from "mongoose";
 import Client from "@/db/models/clientSchema";
+import { auth } from "@/auth";
 connect();
 export async function GET(request: NextRequest) {
   const items_per_page: number =
@@ -19,7 +20,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     if (!user) {
       return NextResponse.json(
         { message: "You are not authorized", success: false },

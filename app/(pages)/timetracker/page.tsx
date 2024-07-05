@@ -14,7 +14,7 @@ async function Data() {
     const res = await fetch(url, {
       next: { tags: ["timeentries"] },
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
     });
     const response = await res.json();

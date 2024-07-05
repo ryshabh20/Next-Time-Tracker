@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { connect } from "@/db/dbConfig";
 import Employee from "@/db/models/employeeSchema";
 import Project from "@/db/models/projectSchema";
@@ -13,7 +14,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     if (!user) {
       return NextResponse.json(
         { message: "You are not authorized", success: "false" },

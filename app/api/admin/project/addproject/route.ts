@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { connect } from "@/db/dbConfig";
 import Project from "@/db/models/projectSchema";
 import { tokenDataId } from "@/helper/tokenData";
@@ -12,7 +13,9 @@ export async function POST(request: NextRequest) {
 
   const calculatedHoursLeft = hoursAlloted - hoursConsumed;
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     if (!user || user.role !== "admin") {
       return NextResponse.json(
         {
@@ -24,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
     const newProject = await new Project({
       ...body,
-      adminId: user._id,
+      adminId: user.id,
       hoursLeft: calculatedHoursLeft,
     });
 

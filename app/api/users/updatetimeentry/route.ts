@@ -5,11 +5,13 @@ import TimeEntries from "@/db/models/timeEntries";
 import { tokenDataId } from "@/helper/tokenData";
 import User from "@/db/models/userSchema";
 import Project from "@/db/models/projectSchema";
+import { auth } from "@/auth";
 
 connect();
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
     const reqBody = await request.json();
     const timeEntryId = reqBody.id;
     const timeEntry = await TimeEntries.findById(timeEntryId);
@@ -26,7 +28,8 @@ export async function POST(request: NextRequest) {
     }
     const userId = timeEntry.user_id.toString();
 
-    const tokenId = await tokenDataId(request);
+    // const tokenId = await tokenDataId(request);
+    const tokenId = session?.user.id;
     if (userId !== tokenId) {
       return NextResponse.json(
         {

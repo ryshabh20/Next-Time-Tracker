@@ -11,7 +11,7 @@ const getProject = async (id: string, cookie: string) => {
       body: JSON.stringify(id),
       next: { tags: ["getEmployees"] },
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
     });
     const response = await res.json();
@@ -32,7 +32,7 @@ const getEmployees = async (
       body: JSON.stringify(role),
       next: { tags: ["getEmployees"] },
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
     });
     const response = await res.json();

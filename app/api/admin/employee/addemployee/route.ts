@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { connect } from "@/db/dbConfig";
 import Employee from "@/db/models/employeeSchema";
 import User from "@/db/models/userSchema";
@@ -12,7 +13,10 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
 
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
+
     if (!user || user.role !== "admin") {
       return NextResponse.json(
         {
@@ -33,7 +37,7 @@ export async function POST(request: NextRequest) {
     const newEmployee = await new Employee({
       ...body,
       email,
-      createdBy: user._id,
+      createdBy: user.id,
     });
 
     const UserPresent = await User.findOne({ email });

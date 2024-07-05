@@ -1,7 +1,7 @@
 import { connect } from "@/db/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 import Project from "@/db/models/projectSchema";
-import { tokenDataId } from "@/helper/tokenData";
+import { auth } from "@/auth";
 
 connect();
 
@@ -10,7 +10,8 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     const body = await request.json();
 
     const projectId = params.id;

@@ -17,7 +17,7 @@ const GetProjects = async (
     const res = await fetch(url, {
       next: { tags: ["projects"] },
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
     });
 

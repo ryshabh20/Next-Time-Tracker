@@ -5,6 +5,7 @@ import { connect } from "@/db/dbConfig";
 import TimeEntries from "@/db/models/timeEntries";
 
 import { tokenDataId } from "@/helper/tokenData";
+import { auth } from "@/auth";
 
 connect();
 export async function GET(
@@ -12,7 +13,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const userId = await tokenDataId(request);
+    const session = await auth();
+    // const userId = await tokenDataId(request);
+    const userId = session?.user?.id;
 
     if (!userId) {
       return NextResponse.json(

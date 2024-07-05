@@ -19,7 +19,7 @@ const GetIdleTime = async (
     const res = await fetch(url, {
       next: { tags: ["idletime"] },
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
     });
 

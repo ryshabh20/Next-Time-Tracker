@@ -32,10 +32,10 @@ const initialState: UserState = {
   error: null,
 };
 
-export const fetchUser = createAsyncThunk("user/fetch", async (thunkApi) => {
-  const response = await axios.get("/api/users/me");
-  return response.data.data;
-});
+// export const fetchUser = createAsyncThunk("user/fetch", async (thunkApi) => {
+//   const response = await axios.get("/api/users/me");
+//   return response.data.data;
+// });
 
 const userSlice = createSlice({
   name: "user",
@@ -51,11 +51,11 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(fetchUser.fulfilled, (state, action) => {
-      state.userData = action.payload;
-    });
-  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(fetchUser.fulfilled, (state, action) => {
+  //     state.userData = action.payload;
+  //   });
+  // },
 });
 
 export const { setUserData, setLoading, setError } = userSlice.actions;

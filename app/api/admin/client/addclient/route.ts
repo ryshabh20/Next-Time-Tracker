@@ -5,15 +5,17 @@ import { NextRequest, NextResponse } from "next/server";
 import Client from "@/db/models/clientSchema";
 
 import { tokenDataId } from "@/helper/tokenData";
+import { auth } from "@/auth";
 
 connect();
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
     const reqBody = await request.json();
-    const user = await tokenDataId(request, true);
-    const tokenId = await tokenDataId(request);
-    if (user.role !== "admin") {
+    const user = session?.user;
+
+    if (user?.role !== "admin") {
       return NextResponse.json(
         { message: "You are not authorized" },
         { status: 401 }
@@ -25,7 +27,7 @@ export async function POST(request: NextRequest) {
       contactnumber,
       email,
       country,
-      adminId: user._id,
+      adminId: user?.id,
     });
     const savedClient = newClient.save();
 

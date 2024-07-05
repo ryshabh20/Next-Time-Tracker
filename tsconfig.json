@@ -24,8 +24,10 @@
   },
   "include": [
     "next-env.d.ts",
+    "next-auth.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.d.ts",
     ".next/types/**/*.ts",
     "app/(pages)/timetracker/Ogpage.tsx",
     "app/api/admin/client/getclients"

@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import TimeEntries from "@/db/models/timeEntries";
 import User from "@/db/models/userSchema";
 import { tokenDataId } from "@/helper/tokenData";
@@ -28,7 +29,9 @@ export async function GET(
   }
 
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     const employeeId = params.id;
     if (!user || user.role !== "admin") {
       return NextResponse.json(

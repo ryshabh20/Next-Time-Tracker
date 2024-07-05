@@ -19,7 +19,7 @@ const GetWorkDetails = async (
     const res = await fetch(url, {
       next: { tags: ["workdetails"] },
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
     });
 

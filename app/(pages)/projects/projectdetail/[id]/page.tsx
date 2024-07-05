@@ -17,7 +17,7 @@ async function GetData(id: string) {
 
     const res = await fetch(url, {
       headers: {
-        Cookie: `authtoken=${cookie}`,
+        Cookie: `authjs.session-token=${cookie}`,
       },
       next: { tags: ["collection"] },
       cache: "no-store",

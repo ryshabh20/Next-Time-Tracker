@@ -6,6 +6,7 @@ import Employee from "@/db/models/employeeSchema";
 
 import { tokenDataId } from "@/helper/tokenData";
 import { SortOrder } from "mongoose";
+import { auth } from "@/auth";
 connect();
 export async function GET(request: NextRequest) {
   const items_per_page: number =
@@ -26,7 +27,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     if (!user) {
       return NextResponse.json(
         { message: "You are not authorized", success: false },
@@ -36,13 +39,13 @@ export async function GET(request: NextRequest) {
 
     const skip = (page - 1) * items_per_page;
     const countPromise = Employee.countDocuments({
-      createdBy: user._id,
+      createdBy: user.id,
 
       employeename: { $regex: search, $options: "i" },
     });
 
     const employeesPromise = Employee.find({
-      createdBy: user._id,
+      createdBy: user.id,
 
       employeename: { $regex: search, $options: "i" },
     })

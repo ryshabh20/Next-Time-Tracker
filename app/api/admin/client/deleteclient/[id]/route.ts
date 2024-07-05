@@ -1,6 +1,6 @@
+import { auth } from "@/auth";
 import { connect } from "@/db/dbConfig";
 import Client from "@/db/models/clientSchema";
-import { tokenDataId } from "@/helper/tokenData";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
@@ -10,7 +10,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     const clientId = params.id;
     if (!user || user.role !== "admin") {
       return NextResponse.json(

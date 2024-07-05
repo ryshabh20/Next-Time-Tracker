@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { tokenDataId } from "@/helper/tokenData";
 import User from "@/db/models/userSchema";
 import { SortOrder } from "mongoose";
+import { auth } from "@/auth";
 
 connect();
 
@@ -24,7 +25,9 @@ export async function GET(
     order = "asc";
   }
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
     if (!user) {
       return NextResponse.json(
         { message: "You are not authorized", success: false },

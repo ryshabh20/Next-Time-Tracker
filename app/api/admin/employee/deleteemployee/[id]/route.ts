@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { connect } from "@/db/dbConfig";
 import Employee from "@/db/models/employeeSchema";
 import User from "@/db/models/userSchema";
@@ -11,7 +12,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await tokenDataId(request, true);
+    // const user = await tokenDataId(request, true);
+    const session = await auth();
+    const user = session?.user;
+
     const employeeId = params.id;
     if (!user || user.role !== "admin") {
       return NextResponse.json(
