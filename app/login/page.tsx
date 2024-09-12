@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { fetchUser } from "@/store/slices/userSlice";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -80,7 +81,11 @@ export default function LoginPage() {
                 Stay logged in
               </label>
             </div>
-            <span className="underline text-custom-green">Forgot Password</span>
+            <Link href={"/auth/forgotpassword"}>
+              <span className="underline text-custom-green">
+                Forgot Password
+              </span>
+            </Link>
           </div>
           <div>
             {errorMessage && <p className="text-red-500">{errorMessage}</p>}
